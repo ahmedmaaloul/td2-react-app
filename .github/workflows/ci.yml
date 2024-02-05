@@ -27,8 +27,9 @@ jobs:
         zip -r build.zip build/
 
     - name: Deploy to Pinata
-      uses: pinata/cloud-action@v1
-      with:
-        pinata_api_key: ${{ secrets.PINATA_API_KEY }}
-        pinata_secret_api_key: ${{ secrets.PINATA_SECRET_API_KEY }}
-        path_to_upload: 'build.zip'
+      run: |
+        curl -X POST https://api.pinata.cloud/pinning/pinFileToIPFS \
+        -H "Content-Type: multipart/form-data" \
+        -H "pinata_api_key: ${{ secrets.PINATA_API_KEY }}" \
+        -H "pinata_secret_api_key: ${{ secrets.PINATA_SECRET_API_KEY }}" \
+        -F "file=@build.zip"
